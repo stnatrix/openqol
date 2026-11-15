@@ -9,8 +9,7 @@ description: >-
 
 ## Overview
 - **Name**: ahktrix (cosmetic identifier used in code, tray menu, tooltip; successor to natrixQoL).
-- **Core Path**: `C:\Users\stnatrix\Documents\ahktrix`
-- **Dev Sandbox**: `C:\Users\stnatrix\Documents\antigravity\natrix.ahk`
+- **Core Path**: `C:\Users\stnatrix\Documents\antigravity\scripts\ahktrix`
 - **Stack**: AutoHotkey v2 (`#Requires AutoHotkey v2.0`), PowerShell 5.1 (dark conhost), 7-Zip, RTSS.
 - **Repository**: `stnatrix/ahktrix` (GitHub, branch `main`, HTTPS + Git Credential Manager with `natrix852@gmail.com` / `natrix853@proton.me`, proxy `socks5://127.0.0.1:10808`).
 - **Current Version**: `1.0.0-alpha.21` (alpha iteration scheme `1.0.0-alpha.X`).
