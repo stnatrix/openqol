@@ -1,4 +1,4 @@
-# ahktrix
+# openQoL
 
 Modular AutoHotkey v2 QoL utilities and CapsLock modifier layer for Windows.
 

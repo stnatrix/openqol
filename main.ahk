@@ -3,8 +3,8 @@
 #UseHook true
 Persistent(true)
 
-global APP_NAME := "ahktrix"
-global APP_VERSION := "1.0.0-alpha.21"
+global APP_NAME := "openQoL"
+global APP_VERSION := "2.0.0"
 
 SetWorkingDir(A_ScriptDir)
 

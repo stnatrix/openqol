@@ -1,18 +1,18 @@
 ---
-name: ahktrix
+name: openqol
 description: >-
-  Project passport, architecture reference, and development procedures for ahktrix (AutoHotkey v2 QoL utility suite & CapsLock modifier layer).
-  Activate whenever modifying, debugging, adding hotkeys, testing, or committing code in the ahktrix / natrix.ahk project.
+  Project passport, architecture reference, and development procedures for openQoL (AutoHotkey v2 QoL utility suite & CapsLock modifier layer).
+  Activate whenever modifying, debugging, adding hotkeys, testing, or committing code in the openQoL project.
 ---
 
-# Project Passport: ahktrix
+# Project Passport: openQoL
 
 ## Overview
-- **Name**: ahktrix (cosmetic identifier used in code, tray menu, tooltip; successor to natrixQoL).
-- **Core Path**: `C:\Users\stnatrix\Documents\antigravity\scripts\ahktrix`
+- **Name**: openQoL (AutoHotkey v2 QoL utilities & CapsLock modifier layer).
+- **Core Path**: `C:\Users\stnatrix\Documents\antigravity\scripts\openqol`
 - **Stack**: AutoHotkey v2 (`#Requires AutoHotkey v2.0`), PowerShell 5.1 (dark conhost), 7-Zip, RTSS.
-- **Repository**: `stnatrix/ahktrix` (GitHub, branch `main`, HTTPS + Git Credential Manager with `natrix852@gmail.com` / `natrix853@proton.me`, proxy `socks5://127.0.0.1:10808`).
-- **Current Version**: `1.0.0-alpha.21` (alpha iteration scheme `1.0.0-alpha.X`).
+- **Repository**: `stnatrix/ahktrix` (GitHub, branch `main`, HTTPS + Git Credential Manager with `natrix852@gmail.com` / `natrix853@proton.me`).
+- **Current Version**: `2.0.0`.
 
 ## Mandatory Invariants
 1. **Zero Comments in Code**: Comments (`//`, `;`, `/* */`) are strictly forbidden across all `.ahk` codebase files.
@@ -51,4 +51,3 @@ description: >-
 ## Validation & Verification Checklist
 1. **Comment Scan**: `Get-ChildItem -Recurse *.ahk | Select-String -Pattern '^\s*;|\s+;'` (must return zero lines).
 2. **AHK v2 Validation**: `& "C:\Program Files\AutoHotkey\v2\AutoHotkey64.exe" /validate main.ahk` (must exit code 0).
-3. **Sync Check**: Files in `C:\Users\stnatrix\Documents\ahktrix` must match dev working copy.
