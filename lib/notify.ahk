@@ -18,11 +18,12 @@ NotifyQoL(title, text := "") {
     textCtrl.Value := text
     textCtrl.Visible := (text != "")
 
-    osdGui.Show("AutoSize NoActivate")
+    osdGui.Show("AutoSize Hide")
     osdGui.GetPos(, , &w, &h)
-    x := A_ScreenWidth - w - 24
-    y := A_ScreenHeight - h - 56
-    osdGui.Move(x, y)
+    MonitorGetWorkArea(, &waLeft, &waTop, &waRight, &waBottom)
+    x := waRight - w - 24
+    y := waBottom - h - 24
+    osdGui.Show("x" x " y" y " NoActivate")
     SetTimer(Dismiss, -2200)
 
     Dismiss() {

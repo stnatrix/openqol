@@ -18,6 +18,7 @@ HasClipboardImageOnly() {
 }
 
 SaveClipboardImageToFile(outPath) {
+    static hGdip := DllCall("LoadLibrary", "str", "gdiplus", "ptr")
     global PNG_CLIP_FMT
     hasPng := PNG_CLIP_FMT && DllCall("IsClipboardFormatAvailable", "uint", PNG_CLIP_FMT)
     hasBmp := DllCall("IsClipboardFormatAvailable", "uint", 2)
@@ -46,7 +47,7 @@ SaveClipboardImageToFile(outPath) {
                     f := FileOpen(outPath, "w")
                     f.RawWrite(pData, sz)
                     f.Close()
-                    saved := FileExist(outPath)
+                    saved := (FileExist(outPath) != "")
                 }
             }
             if pData
@@ -57,7 +58,6 @@ SaveClipboardImageToFile(outPath) {
     if (!saved && hasBmp) {
         hBm := DllCall("GetClipboardData", "uint", 2, "ptr")
         if hBm {
-            DllCall("LoadLibrary", "str", "gdiplus", "ptr")
             tok := 0
             gsi := Buffer(24, 0)
             NumPut("uint", 1, gsi, 0)
@@ -66,9 +66,9 @@ SaveClipboardImageToFile(outPath) {
                 if (DllCall("gdiplus\GdipCreateBitmapFromHBITMAP", "ptr", hBm, "ptr", 0, "ptr*", &pBmp) = 0 && pBmp) {
                     clsid := Buffer(16, 0)
                     DllCall("ole32\CLSIDFromString", "wstr", "{557CF406-1A04-11D3-9A73-0000F81EF32E}", "ptr", clsid)
-                    DllCall("gdiplus\GdipSaveImageToFile", "ptr", pBmp, "wstr", outPath, "ptr", clsid, "ptr", 0)
+                    status := DllCall("gdiplus\GdipSaveImageToFile", "ptr", pBmp, "wstr", outPath, "ptr", clsid, "ptr", 0)
                     DllCall("gdiplus\GdipDisposeImage", "ptr", pBmp)
-                    saved := FileExist(outPath)
+                    saved := (status = 0) && (FileExist(outPath) != "")
                 }
                 DllCall("gdiplus\GdiplusShutdown", "ptr", tok)
             }
@@ -116,7 +116,7 @@ SetClipboardFileDrop(filePath) {
     NumPut("int", 1, pMem, 16)
 
     StrPut(filePath, pMem + 20, StrLen(filePath) + 1, "UTF-16")
-    NumPut("ushort", 0, pMem + 20 + (StrLen(filePath) * 2))
+    NumPut("ushort", 0, pMem + 20 + ((StrLen(filePath) + 1) * 2))
 
     DllCall("GlobalUnlock", "ptr", hMem)
 
@@ -134,9 +134,11 @@ SetClipboardFileDrop(filePath) {
     }
 
     DllCall("EmptyClipboard")
-    DllCall("SetClipboardData", "uint", 15, "ptr", hMem)
+    res := DllCall("SetClipboardData", "uint", 15, "ptr", hMem, "ptr")
+    if !res
+        DllCall("GlobalFree", "ptr", hMem)
     DllCall("CloseClipboard")
-    return true
+    return (res != 0)
 }
 
 GetOrSaveTempClipboardImage() {
@@ -145,7 +147,13 @@ GetOrSaveTempClipboardImage() {
     if (seq != 0 && seq = lastClipSeq && lastClipImagePath != "" && FileExist(lastClipImagePath))
         return lastClipImagePath
 
-    tempPath := A_Temp "\snip-" FormatTime(, "MMdd-HHmmss") ".png"
+    basePath := A_Temp "\snip-" FormatTime(, "MMdd-HHmmss")
+    tempPath := basePath ".png"
+    idx := 1
+    while FileExist(tempPath) {
+        tempPath := basePath "-" idx ".png"
+        idx++
+    }
     if SaveClipboardImageToFile(tempPath) {
         lastClipSeq := seq
         lastClipImagePath := tempPath

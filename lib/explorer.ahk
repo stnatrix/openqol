@@ -21,7 +21,7 @@ GetExplorerPath() {
                 static IID_IShellBrowser := "{000214E2-0000-0000-C000-000000000046}"
                 shellBrowser := ComObjQuery(win, IID_IShellBrowser, IID_IShellBrowser)
                 if shellBrowser {
-                    ComCall(3, shellBrowser, "uint*", &thisTab := 0)
+                    ComCall(3, shellBrowser, "ptr*", &thisTab := 0)
                     if (thisTab != activeTab)
                         continue
                 }
@@ -44,11 +44,21 @@ GetExplorerSelection() {
 
     if (cls = "Progman" || cls = "WorkerW") {
         try {
-            doc := shell.Windows.Item(ComValue(0x13, 8)).Document
-            for item in doc.SelectedItems {
-                p := item.Path
-                if (p != "")
-                    paths.Push(p)
+            desktopHwnd := 0
+            desktopWin := 0
+            try {
+                desktopWin := shell.Windows.FindWindowSW(0, 0, 8, &desktopHwnd, 1)
+            } catch {
+                pvarloc := Buffer(16, 0)
+                hwndBuf := Buffer(4, 0)
+                desktopWin := shell.Windows.FindWindowSW(ComValue(0x400C, pvarloc.Ptr), ComValue(0x400C, pvarloc.Ptr), 8, ComValue(0x4003, hwndBuf.Ptr), 1)
+            }
+            if desktopWin {
+                for item in desktopWin.Document.SelectedItems {
+                    p := item.Path
+                    if (p != "")
+                        paths.Push(p)
+                }
             }
         }
         return paths
@@ -68,7 +78,7 @@ GetExplorerSelection() {
                 static IID_IShellBrowser := "{000214E2-0000-0000-C000-000000000046}"
                 shellBrowser := ComObjQuery(win, IID_IShellBrowser, IID_IShellBrowser)
                 if shellBrowser {
-                    ComCall(3, shellBrowser, "uint*", &thisTab := 0)
+                    ComCall(3, shellBrowser, "ptr*", &thisTab := 0)
                     if (thisTab != activeTab)
                         continue
                 }

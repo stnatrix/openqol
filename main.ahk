@@ -4,7 +4,7 @@
 Persistent(true)
 
 global APP_NAME := "openQoL"
-global APP_VERSION := "2.0.0"
+global APP_VERSION := "2.1.0"
 
 SetWorkingDir(A_ScriptDir)
 
@@ -44,7 +44,8 @@ InitConfig() {
         IniWrite("", iniPath, "Paths", "rtss")
     }
     CFG_EMAIL := IniRead(iniPath, "General", "email", "natrix852@gmail.com")
-    CFG_PWD_LEN := Integer(IniRead(iniPath, "General", "password_length", "16"))
+    rawPwdLen := IniRead(iniPath, "General", "password_length", "16")
+    CFG_PWD_LEN := IsInteger(rawPwdLen) ? Integer(rawPwdLen) : 16
     CFG_7ZIP := IniRead(iniPath, "Paths", "seven_zip", "")
     CFG_RTSS := IniRead(iniPath, "Paths", "rtss", "")
 }

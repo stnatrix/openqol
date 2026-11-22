@@ -6,7 +6,7 @@ TypeEmail() {
 
 GenerateAndCopyPassword() {
     global CFG_PWD_LEN
-    len := (CFG_PWD_LEN > 0) ? CFG_PWD_LEN : 16
+    len := Max(CFG_PWD_LEN, 4)
     pwd := CryptoGeneratePassword(len)
     A_Clipboard := pwd
     NotifyQoL("Password Generated", "Copied " len " chars to clipboard")

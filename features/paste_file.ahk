@@ -15,11 +15,19 @@ HandlePasteAsFile() {
 
     ext := isImg ? "png" : "txt"
     prefix := isImg ? "snip" : "text"
-    fileName := prefix "-" stamp "." ext
+    targetDir := (explorerDir != "") ? explorerDir : A_Temp
+    baseName := prefix "-" stamp
+    fileName := baseName "." ext
+    targetPath := targetDir "\" fileName
+    idx := 1
+    while FileExist(targetPath) {
+        fileName := baseName "-" idx "." ext
+        targetPath := targetDir "\" fileName
+        idx++
+    }
 
     if (explorerDir != "") {
-        filePath := explorerDir "\" fileName
-        saved := isImg ? SaveClipboardImageToFile(filePath) : SaveClipboardTextToFile(filePath)
+        saved := isImg ? SaveClipboardImageToFile(targetPath) : SaveClipboardTextToFile(targetPath)
         if saved
             NotifyQoL("File Created", fileName)
         else
@@ -27,9 +35,8 @@ HandlePasteAsFile() {
         return
     }
 
-    tempPath := A_Temp "\" fileName
-    saved := isImg ? SaveClipboardImageToFile(tempPath) : SaveClipboardTextToFile(tempPath)
-    if (saved && SetClipboardFileDrop(tempPath)) {
+    saved := isImg ? SaveClipboardImageToFile(targetPath) : SaveClipboardTextToFile(targetPath)
+    if (saved && SetClipboardFileDrop(targetPath)) {
         NotifyQoL("File Ready to Paste", fileName)
     } else {
         NotifyQoL("Save Failed", fileName)

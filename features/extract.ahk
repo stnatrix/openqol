@@ -1,4 +1,4 @@
-global ARCHIVE_EXT := "zip|rar|7z|tar|gz|tgz|bz2|tbz|tbz2|xz|txz|zst|tzst|iso|cab|arj|lzh|lha|wim|001|z01|r00"
+global ARCHIVE_EXT := "zip|rar|7z|tar|gz|tgz|bz2|tbz|tbz2|xz|txz|zst|tzst|iso|cab|arj|lzh|lha|wim|001"
 
 ExtractSelectedArchive() {
     selection := GetExplorerSelection()
@@ -30,11 +30,16 @@ ExtractSelectedArchive() {
             dir := A_Desktop
 
         stem := RegExReplace(nameNoExt, "i)\.tar$", "")
+        stem := RegExReplace(stem, "i)\.part0*1$", "")
         targetFolder := dir "\" stem
 
         cmd := '"' sevenPath '" x -aou -o"' targetFolder '" -- "' path '"'
         NotifyQoL("Extracting Archive", stem)
-        Run(cmd, dir)
+        try {
+            Run(cmd, dir)
+        } catch as err {
+            NotifyQoL("Extraction Failed", err.Message)
+        }
     }
 }
 

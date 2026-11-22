@@ -12,7 +12,7 @@ description: >-
 - **Core Path**: `C:\Users\stnatrix\Documents\antigravity\scripts\openqol`
 - **Stack**: AutoHotkey v2 (`#Requires AutoHotkey v2.0`), PowerShell 5.1 (dark conhost), 7-Zip, RTSS.
 - **Repository**: `stnatrix/ahktrix` (GitHub, branch `main`, HTTPS + Git Credential Manager with `natrix852@gmail.com` / `natrix853@proton.me`).
-- **Current Version**: `2.0.0`.
+- **Current Version**: `2.1.0`.
 
 ## Mandatory Invariants
 1. **Zero Comments in Code**: Comments (`//`, `;`, `/* */`) are strictly forbidden across all `.ahk` codebase files.

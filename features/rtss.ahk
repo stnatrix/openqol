@@ -23,8 +23,14 @@ ShowRTSS() {
     }
 
     rtssPath := FindRTSS()
-    if (rtssPath != "") {
+    if (rtssPath == "") {
+        NotifyQoL("RTSS Not Found", "Install RTSS or configure path in config.ini")
+        return
+    }
+    try {
         Run('"' rtssPath '"')
+    } catch as err {
+        NotifyQoL("RTSS Launch Failed", err.Message)
     }
 }
 

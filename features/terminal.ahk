@@ -6,9 +6,12 @@ OpenAdminPowerShell() {
     psPath := A_WinDir "\System32\WindowsPowerShell\v1.0\powershell.exe"
     targetPID := 0
     try {
-        Run('"' psPath '"', targetDir, , &targetPID)
-    } catch {
-        Run('*RunAs "' psPath '"', targetDir, , &targetPID)
+        if A_IsAdmin {
+            Run('"' psPath '"', targetDir, , &targetPID)
+        } else {
+            escapedDir := StrReplace(targetDir, "'", "''")
+            Run('*RunAs "' psPath '" -NoExit -Command "Set-Location -LiteralPath `'`'' escapedDir `'`""', , , &targetPID)
+        }
     }
     if (targetPID && (hwnd := WinWait("ahk_pid " targetPID, , 2))) {
         WinActivate(hwnd)
